@@ -1,10 +1,21 @@
 # cp2-fa20
 ''ml5.js's PoseNet in PongPage
 
+// Copyright (c) 2019 ml5
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+/* ===
+ml5 Example
+PoseNet example using p5.js
+=== */
 
 let video;
 let poseNet;
 let poses = [];
+let ball_1;
+let ball_2;
 
 function setup() {
   createCanvas(640, 480);
@@ -55,7 +66,8 @@ function drawKeypoints()  {
       if (keypoint.score > 0.05) {
         fill(255, 0, 0);
         noStroke();
-        ellipse(keypoint.position.x, keypoint.position.y, 10, 10);
+        ball_1 = ellipse(keypoint.position.x, keypoint.position.y +10, 10, 10);
+        ball_2 = ellipse(keypoint.position.x, keypoint.position.y + 10, 10, 10);
       }
     }
   }
@@ -124,18 +136,18 @@ function pongDraw() {
   
   if (poses.length > 0) {
     leftPaddle = poses[0].pose.rightWrist.y;
-    rightPaddle =poses[0].pose.leftWrist.y;
+    rightPaddle = height - poses[0].pose.leftWrist.y;
   }
   
   rect(PADDLE_OFFSET, leftPaddle, PADDLE_WIDTH, PADDLE_HEIGHT);
   rect(width-PADDLE_OFFSET, rightPaddle, PADDLE_WIDTH, PADDLE_HEIGHT);
   
   stroke(58);
-  ellipse(x, y, BALL_DIAMETER);
+  ball_1 = ellipse(x, y, BALL_DIAMETER);
   fill(150,200,100);
   
-   stroke(58);
-  ellipse(x, y, BALL_DIAMETER);
+  stroke(58);
+  ball_2= ellipse(x, y, BALL_DIAMETER);
   fill(150,2,100);
   
   
@@ -166,6 +178,4 @@ function pongDraw() {
     }
   }  
 }
-
-
 
