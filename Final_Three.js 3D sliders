@@ -1,0 +1,224 @@
+HTML
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.js"></script>
+<div class="sliderContainer">
+    <input type="range" min="1" max="20" value="1" id="myRange" class="slider">
+    <p>Position: <span id="value"></span></p>
+</div>
+<div class="sliderContainer">
+    <input type="range" min="1" max="10" value="1" id="myRange1" class="slider1">
+    <p>Square Size: <span id="value1"></span></p>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
+
+
+
+
+
+#Main.CSS
+
+
+
+
+
+
+body { 
+    margin: 0; 
+    height: 100vh;
+    z-index: -1;
+}
+  
+canvas { 
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    position: absolute;
+    top: 2em;
+    left: 2em;
+    font-family: 'Montserrat';
+    font-size: 7em;
+    text-transform: uppercase;
+    width: auto;
+    line-height: .8em;
+    border: 5px solid black;
+    padding: .2em;
+  }
+
+  .sliderContainer {
+   width: 50%;
+   margin: auto;
+   margin-top: 40px;   
+   margin-bottom: 40px;
+  }
+
+  .slider {
+-webkit-appearance: none;
+width: 100%;
+height: 10px;
+background: red;
+outline: none;
+opacity: 0.7;
+-webkit-transition: 0.2s;
+transition: opacity 0.2s;
+border-radius: 12px;
+box-shadow: 0px 1px 10px 1px black;
+  }
+
+  .slider1 {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: red;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+    border-radius: 12px;
+    box-shadow: 0px 1px 10px 1px black;
+      }
+    
+
+.slider::after {
+    content: '0-10';
+    color: black;
+    font-size: 1rem;
+    position: absolute;
+    height: 10px;
+    left: 30%;
+    top: 20%;
+    width: 80%;
+}
+
+.slider::before {
+    content: '0-20';
+    color:black;
+    font-size: 1rem;
+    position: absolute;
+    left: 30%;
+    top: 9%;
+    width: 50%;
+
+}
+
+  .slider: hover {
+      opacity: 1;
+  }
+
+}
+
+  .slider:::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 40px;
+      weight: 40px;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+  }
+  
+  
+  
+  
+  
+  Main.js
+  
+  
+  
+  let scene, camera, renderer, cube;
+let x, y, z = 0;
+function init(){
+  //SCENE
+  scene = new THREE.Scene();
+     //CAMERA
+     camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+     //RENDERER
+     renderer = new THREE.WebGLRenderer({antialias: true});
+     renderer.setClearColor("#00CEC9");
+     renderer.setSize(window.innerWidth,window.innerHeight);
+     document.body.appendChild(renderer.domElement);
+    //const geometry = new THREE.BoxGeometry(x,y,z);
+    const geometry = new THREE.BoxGeometry(1,1,1);
+    const texture = new THREE.TextureLoader().load('texture.jpg');
+    const material = new THREE.MeshLambertMaterial ({map: texture });
+    cube = new THREE.Mesh(geometry,material);
+    cube.position.y = -2;
+    scene.add(cube);
+    const geometry1 = new THREE.BoxGeometry(1,1,1);
+    const texture1 = new THREE.TextureLoader().load('texture.jpg');
+    const material1 = new THREE.MeshLambertMaterial ({map: texture });
+    cube1 = new THREE.Mesh(geometry1,material1);
+    cube1.position.x = 15;
+    scene.add(cube1);
+    const geometry2 = new THREE.BoxGeometry(1,1,1);
+    const texture2 = new THREE.TextureLoader().load('texture.jpg');
+    const material2 = new THREE.MeshLambertMaterial ({map: texture });
+    cube2 = new THREE.Mesh(geometry2,material2);
+    cube2.position.x = -15;
+    scene.add(cube2);
+   //const geometry3 = new THREE.BoxGeometry(2,2,1);
+    //const texture3 = new THREE.TextureLoader().load('texture.jpg');
+    //const material3 = new THREE.MeshLambertMaterial ({map: texture });
+    //cube3 = new THREE.Mesh(geometry3,material3);
+    //cube3.position.y = -3;
+   // scene.add(cube3);
+    camera.position.z = 20;
+    camera.position.x = 0;
+    const light = new THREE.PointLight( 0xff0000, 2, 100 );
+    light.position.set( 5, 5, 50 );
+    scene.add( light );
+    var slider = document.getElementById("myRange");
+        //Changing X Position of Squares
+slider.addEventListener("input",function(event) {
+  //cube.geometry = new THREE.BoxGeometry(event.target.value,1,1);
+  cube.position.y = 10/(event.target.value)-5;
+  cube1.position.x = (event.target.value)-15;
+  //cube1.geometry = new THREE.BoxGeometry(event.target.value,1,1);
+  //cube2.geometry = new THREE.BoxGeometry(event.target.value,1,1);
+  cube2.position.x = -(event.target.value)+15;
+  console.log("event happened!",event.target.value,cube.geometry.x)})
+}
+var slider1 = document.getElementById("myRange1");
+slider1.addEventListener("input",function(event) {
+  cube.geometry = new THREE.BoxGeometry(event.target.value,event.target.value,event.target.value);
+  cube1.geometry = new THREE.BoxGeometry(event.target.value,event.target.value,event.target.value);
+  cube2.geometry = new THREE.BoxGeometry(event.target.value,event.target.value,event.target.value);})
+function animate() {
+  requestAnimationFrame(animate);
+  var speed = document.getElementById("myRange2")
+cube.rotation.x += 0.03;
+cube.rotation.y += 0.03;
+cube.rotation.z += 0.03;
+cube1.rotation.x += 0.03;
+cube1.rotation.y += 0.03;
+cube2.rotation.x += 0.03;
+cube2.rotation.y += 0.03;
+//speed.addEventListener("input",function(event) {
+  //cube.rotation.x += (event.target.value);
+  //cube.rotation.y += (event.target.value);
+  //cube.rotation.z += (event.target.value);
+//})
+renderer.render(scene,camera);
+}
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+}
+window.addEventListener('resize',onWindowResize,false);
+init();
+animate();
